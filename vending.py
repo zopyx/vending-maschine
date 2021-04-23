@@ -56,7 +56,20 @@ class Inventory:
 
         self.items[int(selection) - 1].amount -= 1
 
-        change = 0
+        # calculate change (coin values given in euro cent)
+        coins = [100, 50, 20, 10, 5]
+        diff = Decimal(deposit) - self.items[int(selection) - 1].price 
+
+        change = []
+        print(diff)        
+        remaining = diff * 100
+        while remaining != 0:
+            for coin in coins:
+                while True:
+                    if remaining  >= coin:
+                        remaining -= coin
+                        change.append(coin)
+
         return change
 
 
