@@ -61,7 +61,6 @@ class Inventory:
         diff = Decimal(deposit) - self.items[int(selection) - 1].price 
 
         change = []
-        print(diff)        
         remaining = diff * 100
         while remaining != 0:
             for coin in coins:
