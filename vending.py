@@ -22,7 +22,7 @@ class Inventory:
         """ Deposit must be a multiple of 0.05 euro cent"""
         try:
             deposit = int(Decimal(deposit) * 100)
-        except TypeError:
+        except Exception:
             return False
 
         if deposit <= 0:
@@ -36,7 +36,7 @@ class Inventory:
 
         try:
             selection = int(selection)
-        except TypeError:
+        except ValueError:
             print("Selection is not a number")
             return False
 
@@ -50,7 +50,7 @@ class Inventory:
         """ Check deposit against item price """
         item = self.items[int(selection) - 1]
         deposit = Decimal(deposit)  # prices are in cents
-        return deposit > item.price
+        return deposit >= item.price
 
     def buy(self, selection, deposit):
 
@@ -68,7 +68,9 @@ class Inventory:
                 while True:
                     if remaining  >= coin:
                         remaining -= coin
-                        change.append(coin)
+                        change.append(coin / 100.0)
+                    else:
+                        break
 
         return change
 
@@ -97,24 +99,26 @@ class Inventory:
                 continue
 
             change = self.buy(selection, deposit)
+            if change:
+                print(f"Your change in Coins is {change} ")
+            else:
+                print("No change")
 
-            print("Your change is {change:0.2lf} €")
 
 def main():
     inventory = Inventory(
         items= [
-            Item(name="Water", amount=10, price=Decimal(0.50)),
-            Item(name="Coke", amount=10, price=Decimal(1.20)),
-            Item(name="Diet Coke", amount=10, price=Decimal(1.20)),
-            Item(name="Ice Tea", amount=10, price=Decimal(1.00)),
-            Item(name="Chokolade", amount=10, price=Decimal(1.50)),
-            Item(name="Candy", amount=10, price=Decimal(0.95)),
-            Item(name="Chips", amount=10, price=Decimal(2.50)),
-            Item(name="Espresso", amount=10, price=Decimal(1.20)),
-            Item(name="Coffee", amount=10, price=Decimal(1.50)),
+            Item(name="Water", amount=10, price=Decimal("0.50")),
+            Item(name="Coke", amount=10, price=Decimal("1.20")),
+            Item(name="Diet Coke", amount=10, price=Decimal("1.20")),
+            Item(name="Ice Tea", amount=10, price=Decimal("1.00")),
+            Item(name="Chokolade", amount=10, price=Decimal("1.50")),
+            Item(name="Candy", amount=10, price=Decimal("0.95")),
+            Item(name="Chips", amount=10, price=Decimal("2.50")),
+            Item(name="Espresso", amount=10, price=Decimal("1.20")),
+            Item(name="Coffee", amount=10, price=Decimal("1.50")),
         ])
 
-    print(inventory.items)
     inventory.run()
 
 if __name__ == "__main__":
