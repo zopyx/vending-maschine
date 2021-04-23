@@ -54,6 +54,7 @@ class Inventory:
 
     def buy(self, selection, deposit):
 
+        # decrease amount
         self.items[int(selection) - 1].amount -= 1
 
         # calculate change (coin values given in euro cent)
