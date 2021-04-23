@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from decimal import Decimal
+import collections
 import typing
 
 @dataclass
@@ -72,7 +73,7 @@ class Inventory:
                     else:
                         break
 
-        return change
+        return collections.Counter(change)
 
 
     def run(self):
@@ -101,6 +102,8 @@ class Inventory:
             change = self.buy(selection, deposit)
             if change:
                 print(f"Your change in Coins is {change} ")
+                for k, v in change.items():
+                    print(f"{v} x {k} €")
             else:
                 print("No change")
 
