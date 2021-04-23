@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from decimal import Decimal
 import typing
 
 @dataclass
@@ -13,17 +14,26 @@ class Inventory:
     items: typing.List[Item]
 
     def print_items(self):
+        """ Print items, their amount and price"""
         for i, item in enumerate(self.items):
-            print(f"#{i+1} {item.name:20s} {item.price / 100.0:0.2f} €  (available: {item.amount})")
+            print(f"#{i+1} {item.name:20s} {item.price:0.2f} €  (available: {item.amount})")
 
     def check_deposit(self, deposit):
+        """ Deposit must be a multiple of 0.05 euro cent"""
         try:
-            deposit = int(float(deposit) * 100)
+            deposit = int(Decimal(deposit) * 100)
         except TypeError:
             return False
+
+        if deposit <= 0:
+            print("Improper deposit value")
+            return False
+
         return deposit % 5 == 0
 
     def item_available(self, selection):
+        """ Check if item is available """
+
         try:
             selection = int(selection)
         except TypeError:
@@ -34,11 +44,12 @@ class Inventory:
             print("Invalid selection")
             return False
 
-        return self.items[selection -1 ].amount > 0
+        return self.items[selection -1].amount > 0
 
     def can_buy(self, selection, deposit):
+        """ Check deposit against item price """
         item = self.items[int(selection) - 1]
-        deposit = float(deposit) * 100 # prices are in cents
+        deposit = Decimal(deposit)  # prices are in cents
         return deposit > item.price
 
     def buy(self, selection, deposit):
@@ -76,25 +87,22 @@ class Inventory:
 
             print("Your change is {change:0.2lf} €")
 
-
 def main():
     inventory = Inventory(
         items= [
-            Item(name="Water", amount=10, price=50),
-            Item(name="Coke", amount=10, price=120),
-            Item(name="Diet Coke", amount=10, price=120),
-            Item(name="Ice Tea", amount=10, price=100),
-            Item(name="Chokolade", amount=10, price=150),
-            Item(name="Candy", amount=10, price=95),
-            Item(name="Chips", amount=10, price=250),
-            Item(name="Espresso", amount=10, price=120),
-            Item(name="Coffee", amount=10, price=150),
+            Item(name="Water", amount=10, price=Decimal(0.50)),
+            Item(name="Coke", amount=10, price=Decimal(1.20)),
+            Item(name="Diet Coke", amount=10, price=Decimal(1.20)),
+            Item(name="Ice Tea", amount=10, price=Decimal(1.00)),
+            Item(name="Chokolade", amount=10, price=Decimal(1.50)),
+            Item(name="Candy", amount=10, price=Decimal(0.95)),
+            Item(name="Chips", amount=10, price=Decimal(2.50)),
+            Item(name="Espresso", amount=10, price=Decimal(1.20)),
+            Item(name="Coffee", amount=10, price=Decimal(1.50)),
         ])
 
     print(inventory.items)
     inventory.run()
-
-
 
 if __name__ == "__main__":
     main()
