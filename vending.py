@@ -101,12 +101,13 @@ class Inventory:
 
             change = self.buy(selection, deposit)
             if change:
-                print(f"Your change in Coins is {change} ")
+                print()
+                print(f"Your change in coins is:")
                 for k, v in change.items():
-                    print(f"{v} x {k} €")
+                    print(f"{v} x {k:0.2f} €")
             else:
                 print("No change")
-
+            print("*"*80)
 
 def main():
     inventory = Inventory(
