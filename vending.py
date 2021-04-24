@@ -7,11 +7,11 @@ import typing
 class Item:
     name: str
     amount: int
-    price: int   # euro cents
+    price: Decimal
 
 
-@dataclass
 class Inventory:
+
     items: typing.List[Item]
 
     def print_items(self):
@@ -19,7 +19,7 @@ class Inventory:
         for i, item in enumerate(self.items):
             print(f"#{i+1} {item.name:20s} {item.price:0.2f} €  (available: {item.amount})")
 
-    def check_deposit(self, deposit):
+    def check_deposit(self, deposit: str) -> bool:
         """ Deposit must be a multiple of 0.05 euro cent"""
         try:
             deposit = int(Decimal(deposit) * 100)
@@ -32,7 +32,7 @@ class Inventory:
 
         return deposit % 5 == 0
 
-    def item_available(self, selection):
+    def item_available(self, selection: str) -> bool:
         """ Check if item is available """
 
         try:
@@ -47,13 +47,13 @@ class Inventory:
 
         return self.items[selection -1].amount > 0
 
-    def can_buy(self, selection, deposit):
+    def can_buy(self, selection: str, deposit: str) -> bool:
         """ Check deposit against item price """
         item = self.items[int(selection) - 1]
         deposit = Decimal(deposit)  # prices are in cents
         return deposit >= item.price
 
-    def buy(self, selection, deposit):
+    def buy(self, selection: str, deposit: str):
 
         # decrease amount
         self.items[int(selection) - 1].amount -= 1
