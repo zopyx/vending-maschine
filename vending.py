@@ -5,12 +5,14 @@ import typing
 
 @dataclass
 class Item:
+    """ An item that you can buy """
     name: str
     amount: int
     price: Decimal
 
 @dataclass
-class Inventory:
+class VendingMachine:
+    """ The vending machine """
 
     items: typing.List[Item]
 
@@ -41,7 +43,7 @@ class Inventory:
             print("Selection is not a number")
             return False
 
-        if not (1 <= selection <= len(self.items)):
+        if not 1 <= selection <= len(self.items):
             print("Invalid selection")
             return False
 
@@ -60,7 +62,7 @@ class Inventory:
 
         # calculate change (coin values given in euro cent)
         coins = [100, 50, 20, 10, 5]
-        diff = Decimal(deposit) - self.items[int(selection) - 1].price 
+        diff = Decimal(deposit) - self.items[int(selection) - 1].price
 
         change = []
         remaining = diff * 100
@@ -102,7 +104,7 @@ class Inventory:
             change = self.buy(selection, deposit)
             if change:
                 print()
-                print(f"Your change in coins is:")
+                print("Your change in coins is:")
                 for k, v in change.items():
                     print(f"{v} x {k:0.2f} €")
             else:
@@ -110,7 +112,7 @@ class Inventory:
             print("*"*80)
 
 def main():
-    inventory = Inventory(
+    v = VendingMachine(
         items= [
             Item(name="Water", amount=10, price=Decimal("0.50")),
             Item(name="Coke", amount=10, price=Decimal("1.20")),
@@ -123,7 +125,7 @@ def main():
             Item(name="Coffee", amount=10, price=Decimal("1.50")),
         ])
 
-    inventory.run()
+    v.run()
 
 if __name__ == "__main__":
     main()
