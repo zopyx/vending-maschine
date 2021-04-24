@@ -9,7 +9,7 @@ class Item:
     amount: int
     price: Decimal
 
-
+@dataclass
 class Inventory:
 
     items: typing.List[Item]
