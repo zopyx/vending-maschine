@@ -68,13 +68,9 @@ class VendingMachine:
         remaining = diff * 100
         while remaining != 0:
             for coin in coins:
-                while True:
-                    if remaining  >= coin:
-                        remaining -= coin
-                        change.append(coin / 100.0)
-                    else:
-                        break
-
+                while not remaining < coin:
+                    remaining -= coin
+                    change.append(coin / 100.0)
         return collections.Counter(change)
 
 
@@ -101,8 +97,7 @@ class VendingMachine:
                 print("Not enough deposit")
                 continue
 
-            change = self.buy(selection, deposit)
-            if change:
+            if change := self.buy(selection, deposit):
                 print()
                 print("Your change in coins is:")
                 for k, v in change.items():
